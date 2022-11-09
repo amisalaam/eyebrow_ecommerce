@@ -1,0 +1,14 @@
+<aside class="col-md-3  " >
+    <!--   SIDEBAR   -->
+    <ul class="list-group text-center" >
+      <a class="list-group-item {% if '/myaccount/' in request.path %}bg-dark text-white {% else %} bg-white text-dark {% endif %} card  mb-1 " href="{% url 'myaccount' %}"> My Profile </a>
+
+      <a class="list-group-item bg-white text-dark card mb-1 " href=""> My Orders </a>
+      <a class="list-group-item {% if '/edit_profile/' in request.path %}bg-dark text-white {% else %} bg-white text-dark {% endif %} card  mb-1 " href="{% url 'edit_profile' %}"> Edit  Profile </a>
+      <a class="list-group-item {% if '/change_password/' in request.path %}bg-dark text-white {% else %} bg-white text-dark {% endif %} card  mb-1 " href="{% url 'change_password' %}"> Change Password </a>
+
+    </ul>
+    <br>
+    <a class="btn btn-danger btn-block" href="{% url 'signout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a>
+    <!--   SIDEBAR .//END   -->
+  </aside>
