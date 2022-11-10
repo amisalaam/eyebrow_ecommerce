@@ -20,18 +20,18 @@ def store (request,category_slug=None ):
         paginator=Paginator(products,4)
         page =request.GET.get('page')
         paged_products= paginator.get_page(page)
-        product_count =products.count()
+        products_count =products.count()
     else:
         products = Product.objects.all().filter(is_available = True)
         paginator=Paginator(products,4)
         page =request.GET.get('page')
         paged_products= paginator.get_page(page)
-        product_count= products.count()
+        products_count= products.count()
 
 
     context =  {
         'products': paged_products, 
-        'product_count':product_count,
+        'products_count':products_count,
     }
 
    
@@ -52,9 +52,21 @@ def product_detail(request, category_slug,product_slug):
 
     }    
            
-    return render (request,'store/product_detail.html',context)
+    return render (request,'store/product_detail1.html',context)
 
 
 def search(request):
-    return render(request, 'store/store1.html') 
+    if 'keyword' in request.GET:
+        keyword =request.GET['keyword']
+        if keyword:
+            products=Product.objects.order_by('-created_date').filter(Q(description__icontains=keyword) | Q(product_name__icontains=keyword ))
+            products_count= products.count()
+    
+    context={
+        'products':products,
+        'products_count':products_count,
+
+    }
+    
+    return render(request, 'store/store1.html',context) 
   
