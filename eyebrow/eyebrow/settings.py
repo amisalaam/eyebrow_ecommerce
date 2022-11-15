@@ -159,5 +159,5 @@ MESSAGE_TAGS = {
 EMAIL_HOST= 'smtp.gmail.com'
 EMAIL_PORT =587
 EMAIL_HOST_USER ='eyebrow5550@gmail.com'
-EMAIL_HOST_PASSWORD='eyxxrtemzfnhhmib'
+EMAIL_HOST_PASSWORD='kjrqhghzjcuvdizh'
 EMAIL_USE_TLS =True

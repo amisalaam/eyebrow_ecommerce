@@ -16,13 +16,15 @@ from .forms import UserForm, UserProfileForm
 
 
 def home(request):
-    products = Product.objects.all().filter(is_available = True)
+    
+    products = Product.objects.filter(is_available = True).order_by('created_date')
 
     context =  {
         'products':products,
+
     }
 
-    return render(request,'users/home.html',context)
+    return render(request,'users/home2.html',context)
 
 
 # MYACCOUNT CONDITION (DASH BOARD)
@@ -30,6 +32,7 @@ def home(request):
 def myaccount(request):
     # order=order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
     # orders_count=order.count()
+    
     userprofile = UserProfile.objects.get(user_id=request.user.id)
 
     context = {
@@ -39,8 +42,8 @@ def myaccount(request):
      }
 
 
-    return render(request, 'users/myaccount.html')
-    # ,context
+    return render(request, 'users/myaccount.html',context)
+  
 
 
 # EDIT PROFILE CONDITION
@@ -61,9 +64,9 @@ def edit_profile(request):
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=userprofile)
     context = {
-        'user_form':  user_form,
+        'user_form'   :  user_form,
         'profile_form': profile_form,
-        'userprofile': userprofile,
+        'userprofile' : userprofile,
     }
     return render(request, 'users/edit_profile.html', context)
 
@@ -75,7 +78,7 @@ def edit_profile(request):
 def change_password(request):
     if request.method == 'POST':
         current_password = request.POST['current_password']
-        new_password = request.POST['new_password']
+        new_password     = request.POST['new_password']
         confirm_password = request.POST['confirm_password']
 
         user = Account.object.get(username__iexact =request.user.username)
@@ -90,14 +93,5 @@ def change_password(request):
                 user.save()
                 messages.success(request,'Password Changed')
                 return redirect('signin')
-
-               
-               
-      
-     
-
-        
-
-
 
     return render (request,'users/change_password.html')
