@@ -19,3 +19,9 @@ class category (models.Model):
     def __str__(self):
         return self.category_name 
 
+class SubCategory( models.Model):
+    category = models.ForeignKey(category,on_delete=models.CASCADE)
+    subcategory_name = models.CharField(max_length=50,null=False)
+    
+
+

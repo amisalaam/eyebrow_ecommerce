@@ -3,79 +3,80 @@
 {% block content %}
 {% include 'include/nav.html' %}
 
-<section class="section-content padding-y bg" style="margin-top: 100px;">
+<section class="section-content padding-y bg" style="margin-top: 200px;">
+  {% if not cart_items %}
+  <div style="margin-top:100px ; margin-bottom:100px;">
+    <h2 class="text-center fw-bold text-danger">No produts available</h2>
+    <br>
+    <div class="text-center">
+      <a href="{% url 'store' %}" class="btn btn-dark">Continue Shopping</a>
+    </div>
+  </div>
+  {% else %}
+
+
 
   <div class="container">
-    <!-- ============================ COMPONENT 1 ================================= -->
-
     <div class="row">
       <aside class="col-lg-7">
         <div class="card">
           <div class="card-body">
-            <h4 class="card-titile mb-4">Billing Address</h4>
-            <form action="" method="POST">
+            <form action="{% url 'placeorder' %}" method="POST">
+              {% csrf_token %}
+              <h4 class="card-titile mb-4">Billing Address</h4>
               <div class="form-row">
                 <div class="col form-group">
                   <label for="">First Name</label>
-                  <input type="text" name="first_name" class="form-control" required>
+                  <input type="text" name="first_name" class="form-control" required
+                    value="{{ request.user.first_name }}">
                 </div>
                 <div class="col form-group">
                   <label for="">Last Name</label>
-                  <input type="text" name="last_name" class="form-control" required>
+                  <input type="text" name="last_name" class="form-control" required
+                    value="{{ request.user.last_name }}">
                 </div>
-
               </div>
               <div class="form-row">
                 <div class="col form-group">
                   <label for="">Email</label>
-                  <input type="email" name="email" class="form-control" required>
+                  <input type="email" name="email" class="form-control" required value="{{ request.user.email }}">
                 </div>
                 <div class="col form-group">
                   <label for="">Phone Number</label>
-                  <input type="text" name="phone_number" class="form-control" required>
-                </div>
-
-              </div>
-              <div class="form-row">
-                <div class="col form-group">
-                  <label for="">Address line 1</label>
-                  <input type="email" name="address_line_1" class="form-control" required>
+                  <input type="text" name="phone" class="form-control" required value="{{ userprofile.phone }}">
                 </div>
               </div>
               <div class="form-row">
                 <div class="col form-group">
-                  <label for="">Address line 2</label>
-                  <input type="email" name="address_line_2" class="form-control">
+                  <label for="">Address</label>
+                  <textarea name="address" rows="2" class="form-control">{{ userprofile.address }}</textarea>
                 </div>
               </div>
               <div class="form-row">
                 <div class="col form-group">
                   <label for="">City</label>
-                  <input type="text" name="city" class="form-control" required>
+                  <input type="text" name="city" class="form-control" required value="{{ userprofile.city }}">
                 </div>
                 <div class="col form-group">
                   <label for="">State</label>
-                  <input type="text" name="state" class="form-control" required>
-                </div>
-                <div class="col form-group">
-                  <label for="">Country</label>
-                  <input type="text" name="country" class="form-control " required>
+                  <input type="text" name="state" class="form-control" required value="{{ userprofile.state }}">
                 </div>
               </div>
               <div class="form-row">
                 <div class="col form-group">
-                  <label for="">Order Note</label>
-                  <textarea name="order_note" rows="2" class="form-control"></textarea>
+                  <label for="">Country</label>
+                  <input type="text" name="country" class="form-control" required value="{{ userprofile.country }}">
+                </div>
+                <div class="col form-group">
+                  <label for="">Pincode</label>
+                  <input type="number" name="pincode" class="form-control" required value="{{ userprofile.pincode }}">
                 </div>
               </div>
-        
           </div>
-
-
         </div>
-        <!-- card.// -->
       </aside>
-      <!-- col.// -->
+
+
       <aside class="col-lg-5">
         <div class="card">
           <div class="card-body">
@@ -85,15 +86,11 @@
                   <th scope="col">Product</th>
                   <th scope="col">Quantity</th>
                   <th scope="col">Price</th>
-
-
                 </tr>
               </thead>
               {% for cart_item in cart_items %}
               <tbody>
                 <tr>
-
-
                   <td>
                     <figure class="itemside align-items-center">
                       <div class="how-itemcart1">
@@ -107,7 +104,6 @@
                           {{ item.variation_category | capfirst}} : {{ item.variation_value | capfirst}} <br>
                           {% endfor %}
                           {% endif %}
-
                         </p>
                       </figcaption>
                     </figure>
@@ -120,34 +116,38 @@
                       <var class="price">${{cart_item.sub_total }}</var><br>
                       <small class="text-muted"> ${{ cart_item.product.price}} each </small>
                     </div>
-                    <!-- price-wrap .// -->
                   </td>
-
                 </tr>
               </tbody>
               {% endfor %}
             </table>
-
-
-            <button type="submit" name="submit" class="btn btn-dark btn-block">Place Order</button>
-            <a href="{% url 'store' %}" class="btn btn-light btn-block">Continue Shopping</a>
+            <hr>
+            <div class="container">
+              <dl>
+                <dt>Total Amount:</dt>
+                <dd class="text-right">${{ grand_total }}</dd>
+              </dl>
+            </div>
+            <input type="hidden" value="COD" name="payment_mode">
+            <button type="submit" name="submit" class="btn btn-success btn-block">COD | Place Order</button>
+            <button type="submit" name="submit" class="btn btn-primary btn-block payWithRazorpay">Pay with Razorpay
+            </button>
+            <a href="{% url 'store' %}" class="btn btn-danger btn-block">Continue Shopping</a>
           </div>
-          <!-- card-body.// -->
         </div>
-        <!-- card.// -->
+        {% endif %}
       </aside>
-    </form>
-      <!-- col.// -->
+      </form>
     </div>
-    <!-- row.// -->
-    <!-- ============================ COMPONENT 1 END .// ================================= -->
   </div>
-  <!-- container .//  -->
-
 </section>
-<!-- ========================= SECTION CONTENT END// ========================= -->
 
 
 
 {% include 'include/footer.html' %}
 {% endblock content%}
+{% block scripts %}
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script src="{% static 'js/checkout.js' %}"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+{% endblock scripts %}

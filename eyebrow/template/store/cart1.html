@@ -8,9 +8,9 @@
 
 <section class="section-content padding-y bg" style="margin-top: 100px;">
   {% if not cart_items %}
-  <div>
-      <div style="margin-top: 200px;">
-         <h2 class="text-center fw-bold" >You're Shopping Cart is Empty</h2>
+  <div style="margin-top: 200px; margin-bottom:100px ;">
+      <div>
+         <h2 class="text-center fw-bold text-danger" >You're Shopping Cart is Empty</h2>
         <br>
       </div>
 
@@ -139,6 +139,6 @@
   <!-- ========================= SECTION CONTENT END// ========================= -->
 
 
-	
+	{% include 'include/footer.html' %}
 		
 	{% endblock content %}

@@ -8,6 +8,7 @@ from  store.models import Product
 from .models import *
 # from orders.model import order
 from .forms import UserForm, UserProfileForm
+from django.core.paginator import Paginator
 
 
 
@@ -17,10 +18,16 @@ from .forms import UserForm, UserProfileForm
 
 def home(request):
     
-    products = Product.objects.filter(is_available = True).order_by('created_date')
+    products = Product.objects.filter(is_available = True).order_by('-created_date')
+    banners = Banner.objects.all().order_by('-id')
+    brandad= BrandaAd.objects.all().order_by('-id')
+    paginator=Paginator(products,12)
 
     context =  {
         'products':products,
+        'paginator':paginator,
+        'banners': banners,
+        'brandad' : brandad
 
     }
 
@@ -33,7 +40,7 @@ def myaccount(request):
     # order=order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
     # orders_count=order.count()
     
-    userprofile = UserProfile.objects.get(user_id=request.user.id)
+    userprofile = UserProfile.objects.filter(user_id=request.user.id)
 
     context = {
     #     'orders_count':orders_count,
@@ -59,12 +66,11 @@ def edit_profile(request):
             profile_form.save()
             messages.success(request,'Your profile has been updated')
             return redirect('edit_profile')
-
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=userprofile)
     context = {
-        'user_form'   :  user_form,
+        'user_form'   : user_form,
         'profile_form': profile_form,
         'userprofile' : userprofile,
     }

@@ -2,6 +2,8 @@
 from django.urls import reverse
 from django.db import models
 from category.models import category
+from my_admin.models import Account
+from django.db.models import Avg ,Count
 
 # Create your models here.
 
@@ -25,6 +27,20 @@ class Product(models.Model):
 
     def __str__(self):
         return self.product_name
+
+    def averageReview(self):    
+        reviews = ReviewRating.objects.filter(product=self, status=True).aggregate(average=Avg('rating'))
+        avg=0
+        if reviews['average'] is not None:  # type: ignore
+            avg = float(reviews['average'])  # type: ignore
+        return avg  
+
+    def countReview(self):
+        reviews = ReviewRating.objects.filter(product=self, status=True).aggregate(count=Count('id'))
+        count = 0
+        if reviews['count'] is not None:
+            count = int(reviews['count'])
+        return count
 
 class VariationManager(models.Manager):
     def colors(self):
@@ -60,22 +76,19 @@ class Variation(models.Model):
 class MultipleImages(models.Model):
     image = models.ImageField(upload_to='media/product')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-# coding standartd
-# slider category
 
 
-# class slider(models.Model):
-#     DISCOUNT_DEAL = (
-#         ('HOT DEALS', 'HOT DEALS'),
-#         ('New Arraivels', 'New Arraivels')
-#     )
 
-#     Image         = models.ImageField(upload_to='media/slider_imgs')
-#     Discount_Deal = models.CharField(choices=DISCOUNT_DEAL, max_length=100)
-#     SALE          = models.IntegerField()
-#     Brand_Name    = models.CharField(max_length=200)
-#     Discount      = models.IntegerField()
-#     Link          = models.CharField(max_length=200)
+class ReviewRating(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user = models.ForeignKey(Account, on_delete=models.CASCADE)
+    subject = models.CharField(max_length=100, blank=True)
+    review = models.TextField(max_length=500, blank=True)
+    rating = models.FloatField(max_length=20)
+    ip = models.CharField(max_length=20, blank=True)
+    status = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True,null=True)
+    updated_at = models.DateTimeField(auto_now=True,null=True)
 
-#     def __str__(self):
-#         return self.Brand_Name
+    def __str__(self):
+        return self.subject

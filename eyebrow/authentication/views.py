@@ -2,12 +2,15 @@
 
 from django.shortcuts import render, redirect
 from my_admin.models import Account
-from django.contrib import messages
+from django.contrib import messages,auth
 from django.contrib.auth import authenticate, login, logout
 from .forms import UserSignup, UserSignin
 from django.contrib.auth.decorators import login_required
 from carts.models import Cart,CartItem
 from carts.views import _cart_id
+
+#REDIRECTING USER TO THE CHECKOUT PAGE
+import requests
 
 #VERIFICATION IMPORTS
 from django.contrib.sites.shortcuts import get_current_site
@@ -18,7 +21,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import EmailMessage 
 
 
-#signup
+#SIGNUP
 def register(request):
     if request.method=='POST':
         form=UserSignup(request.POST)
@@ -35,7 +38,6 @@ def register(request):
                 
             user.save()
             
-            
             # USER ACTIVATION
             current_site=get_current_site(request)
             mail_subject='ACTIVATION CODE FROM EYE BROW'
@@ -49,7 +51,7 @@ def register(request):
             to_email=email
             send_email=EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-            messages.success(request, 'Check Your Email For Activation Link To Activate Your Account')
+            # messages.success(request, 'Check Your Email For Activation Link To Activate Your Account')
             return redirect('/authentication/signin/?command=verification&email='+email)
     else:
         form = UserSignup
@@ -59,8 +61,8 @@ def register(request):
     }
     return render(request, 'authentication/user_signup.html', context)
 
-# # signin conditions
 
+# SIGNIN CONDITIONS 
 def signin(request ):
     if request.user.is_authenticated:
         return redirect('home')
@@ -68,15 +70,11 @@ def signin(request ):
         if request.method == 'POST':
             email         = request.POST['email']
             password      = request.POST['password']
-
             user = authenticate(email=email, password=password)
-
             if user is not None:
                 try:
-                 print('tryblock is working')
                  cart =Cart.objects.get(cart_id=_cart_id(request))
                  is_cart_item_exists = CartItem.objects.filter(cart=cart).exists()
-                 
                  if is_cart_item_exists:
                     cart_item = CartItem.objects.filter(cart=cart)
                     product_variation = []
@@ -90,8 +88,6 @@ def signin(request ):
                         existing_variation = item.variation.all()
                         ex_var_list.append(list(existing_variation))
                         id.append(item.id)   # type: ignore
-
-
                     for product in product_variation:
                         if product in ex_var_list:
                             index = ex_var_list.index(product) 
@@ -107,9 +103,20 @@ def signin(request ):
                                 item.save()
                 except:
                       pass            
-                login(request, user)
-                return redirect('home')
+                auth.login(request, user)
+                url = request.META.get('HTTP_REFERER')
+                try:
+                    query = requests.utils.urlparse(url).query    # type: ignore
 
+
+                    #spliting the next in to  a dict
+                    params = dict(x.split('=') for x in query.split('&'))
+                    if 'next' in params:
+                        nextPage = params['next']
+                        return redirect(nextPage)
+                except:
+                    return redirect('home')  
+                
             else:
                 messages.error(request, 'Incorrect username or password')
                 return redirect('signin')
@@ -119,7 +126,7 @@ def signin(request ):
 
 
 
-#  logoutcondition
+#  LOGOUT CONDITION 
 @login_required(login_url='signin')
 def signout(request):
     logout(request)
@@ -135,8 +142,6 @@ def activate (request,uidb64,token):
         user = Account._default_manager.get(pk=uid)
     except(TypeError,ValueError,OverflowError,Account.DoesNotExist):
         user=None
-
-
     if user is not None and default_token_generator.check_token(user,token):
         user.is_active = True
         user.save()
@@ -148,17 +153,13 @@ def activate (request,uidb64,token):
          
 
 #FORGOT PASSWORD CONDITIONS
-
 def forgotpassword(request):
     if request.method == 'POST':
-        
         email = request.POST['email']
         if Account.object.filter(email=email).exists():
             user=Account.object.get(email__iexact=email)
 
-
             #RESET PASSWORD EMAIL SENDING CONDITION 
-
             current_site = get_current_site(request)
             mail_subject = 'RESET YOUR PASSWORD '
             message = render_to_string('authentication/reset_password_email.html',
@@ -171,27 +172,23 @@ def forgotpassword(request):
             to_email = email
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
-
             messages.success(request,'Password reset email has been sent to your email')
             return redirect('forgotpassword')
-
         else:
          messages.error(request,'Account does not exist')  
          return redirect('forgotpassword')  
-        
     form = UserSignup()
     return render(request,'authentication/forgotpassword.html', {'form' : form})
 
 
- #PASSWORD RESET EMAIL CONDITION  URLS
 
+ #PASSWORD RESET EMAIL CONDITION  URLS
 def resetpassword_validate(request,uidb64,token):
     try:
         uid = urlsafe_base64_decode(uidb64).decode()
         user = Account._default_manager.get(pk=uid)
     except(TypeError,ValueError,OverflowError,Account.DoesNotExist):
         user=None
-
     if user is not None and default_token_generator.check_token(user,token):
         request.session['uid'] = uid # type: ignore
         messages.success(request,'Please reset Your password ')
@@ -201,14 +198,12 @@ def resetpassword_validate(request,uidb64,token):
         return redirect('signin')      
 
 
+
 #RESET PASSWORD CONDITION
-
-
 def resetpassword(request):
     if request.method    =='POST':
         password         = request.POST['password']
         confirm_password = request.POST['confirm_password']
-        
         if password == confirm_password:
             uid     = request.session.get('uid')
             user    = Account.object.get(pk=uid)
@@ -216,11 +211,9 @@ def resetpassword(request):
             user.save()
             messages.success(request,'Password Reset Successfully')
             return redirect ('signin')
-
         else:
          messages.error(request,'Password does not match')
          return redirect('resetpassword')
-
     return render(request,'authentication/resetpassword.html')
     
     

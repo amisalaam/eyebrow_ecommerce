@@ -276,7 +276,102 @@
     $('.js-hide-modal1').on('click',function(){
         $('.js-modal1').removeClass('show-modal1');
     });
+    
+// ADD TO WISHLIST
 
+// $('.plus-wishlist').click(function() { 
+//     var id=$(this).attr("pid").toString();
+//     console.log(id)
+//     $.ajax({
+//         type:"GET",
+//         url:"/wishlist/add_wishlist/",
+//         data:{
+//             prod_id:id
+//         },
+//         success:function(data) {
+//             alert(data.message)
+            
+//         }
+//     })
+    
+// });
+
+
+// $('.minus-wishlist').click(function() { 
+//     var id=$(this).attr("pid").toString();
+//     $.ajax({
+//         type:"GET",
+//         url:"/wishlist/remove_wishlist",
+//         data:{
+//             prod_id:id
+//         },
+//         success:function(data) {
+//             alert("wish list removed")
+            
+//         }
+//     })
+    
+// });
+// //add to wishlist using ajax
+// $(document).on('click',"#addtowishlist",function() {
+//     var _vm = $(this);
+//     var product_id = $(this).attr('prod-id');
+
+
+//     console.log(product_id+'prod id')
+
+
+      
+
+//     // Ajax
+//     $.ajax({
+//         url: '/carts/wishlist/add-to-wishlist',
+//         data:{
+//             'id':product_id,
+//         },
+//         dataType:'json',
+//         beforeSend:function() {
+//             _vm.attr('disabled', true);
+//         },
+//         success:function(res){
+//             console.log(res);
+//             _vm.attr('disabled', false);           
+//         }
+
+//     });
+//     // end ajax
+
+// });
+
+// // end of add to wishlist
+
+// // Delete item from wishlist
+// $(document).on('click',".delete-wish",function(){
+//     var _pId=$(this).attr('data-item');
+//     var _vm=$(this);
+//     //Ajax
+//     $.ajax({
+//         url: '/cart/delete-from-wishlist',
+//         data:{
+//             'id':_pId,
+//         },
+//         dataType:'json',
+//         beforeSend:function() {
+//             _vm.attr('disabled', true);
+//         },
+//         success:function(res){
+//             console.log(res);
+//             _vm.attr('disabled', false);           
+//         },
+//         success:function(res){
+//             $("#cartList").html(res.data);
+//             console.log(res.data)
+//         }
+
+//     });
+//     //end ajax
+// });
+// end of delete item
 
 
 })(jQuery);
