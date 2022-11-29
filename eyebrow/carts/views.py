@@ -167,7 +167,6 @@ def cart(request, total=0, quantity=0, cart_items=None):
            cart_items   = CartItem.objects.filter(user=request.user, is_active=True)
         else:
            cart         = Cart.objects.get(cart_id=_cart_id(request))
-           print(cart,'aaaaaaaaaaaaaaaaaaaaaaaaaaa')
            cart_items   = CartItem.objects.filter(cart=cart, is_active=True)
         for cart_item in cart_items:
             total    += (cart_item.product.price * cart_item.quantity)
@@ -183,7 +182,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'tax': tax,
         'grand_total': grand_total,
     }
-    print(context,'............................')
+    
     return render(request, 'store/cart1.html', context)
 
 

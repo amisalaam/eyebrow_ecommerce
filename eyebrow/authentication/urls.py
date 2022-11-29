@@ -8,13 +8,11 @@ urlpatterns = [
     path('forgotpassword/',views.forgotpassword,name='forgotpassword'),
 
     # ACTIVATION URLS
-
     path('activate/<uidb64>/<token>/',views.activate, name='activate'),
 
-     # RESET PASSWORD EMAIL URLS
-
+    # RESET PASSWORD EMAIL URLS
     path('resetpassword_validate/<uidb64>/<token>/',views.resetpassword_validate, name='resetpassword_validate'),
 
-     # RESET PASSWORD URLS
+    # RESET PASSWORD URLS
     path('resetpassword/',views.resetpassword,name='resetpassword'),
 ]

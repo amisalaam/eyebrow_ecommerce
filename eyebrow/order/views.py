@@ -9,10 +9,13 @@ from .models import Profile
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from django.views.decorators.cache import never_cache
 
 
+# Create your views here
 
-# Create your views here.
+
+@never_cache
 @login_required(login_url=('signin')) 
 def placeorder(request):
     if request.method =='POST':
@@ -95,7 +98,7 @@ def placeorder(request):
         return redirect('myorder')
     return redirect('checkout') 
 
-
+@never_cache
 @login_required(login_url=('signin'))  # type: ignore
 def razorpaycheck(request):
     cart = CartItem.objects.filter(user=request.user)  
@@ -114,6 +117,7 @@ def razorpaycheck(request):
 
 
 #MY ORDER FUNCTION
+@never_cache
 @login_required(login_url=('signin')) 
 def myorder(request):
     orders=Order.objects.filter(user=request.user).order_by('-created_at')
@@ -123,6 +127,7 @@ def myorder(request):
     return render(request,'order/myorder.html',context)
 
 
+@never_cache
 @login_required(login_url=('signin')) 
 def vieworder(request,t_no):
     order =Order.objects.filter(tracking_no=t_no,user=request.user).first()

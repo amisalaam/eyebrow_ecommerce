@@ -1,0 +1,111 @@
+{% extends 'base.html' %} 
+{% load static%}
+{% block content %}
+{% include 'include/nav.html' %}
+
+<section class="section-content padding-y bg" style="margin-top: 100px;">
+    <div class="container mb-5" style=background-color:#1f1d29;>
+      <div class="d-flex mb-3 justify-content-end">
+        <form action="{% url 'variation_management' %}" class="search" method="POST">
+            {% csrf_token %}
+      </div>
+      <div class="row">
+        {% include 'include/manager_sidebar.html' %}
+  
+        <main class="col-md-9">
+          <h2 class="text-center font-weight-bold text-white my-5">Manage Products</h2>
+  
+          <div class="row d-flex justify-content-between">
+  
+            <form action="" class="search col-8" method="POST" class=" d-flex justify-content-center">
+              {% csrf_token %}
+              <div class="mr-5"> 
+                <div class="input-group w-75 mr-5">
+                  <input type="text" id="form1" class="form-control" placeholder="search" name="keyword" />
+  
+                  <button class="btn btn-dark" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+  
+            <a href="{% url 'add_variation' %}" class="btn btn-success m-3 col-3 mt-5">Add Variation</a>
+          </div>
+          {% for message in messages %}
+                <div>
+                  <p class=" alert alert-{{message.tags}} text-center">{{message}}</p>
+                </div>
+                {% endfor %}
+          <div class="shopping__cart__table">
+          <table class="table bg-white">
+            <thead>
+              <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Value</th>
+                <th scope="col">Active</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+                
+  
+              </tr>
+            </thead>
+            <tbody>
+                {% for variation in variations %}
+                <tr>
+                  <th scope="row">{{ variation.id }}</th>
+                  <td>{{ variation.product | capfirst}}</td>
+                  <td>{{ variation.variation_category }}</td>
+                  <td>{{ variation.variation_values }}</td>
+                  <td>
+                    {% if variation.is_active %}
+                    <i class="fas fa-check-circle" style="color: #28a745"></i>
+                    {% else %}
+                    <i class="fas fa-times-circle" style="color: #c21010"></i>
+                    {% endif %}
+                  </td>
+                  <td><a href="{% url 'update_variation' variation.id %}" class="btn btn-sm btn-info">Update</a></td>
+                  <td><a href="{% url 'delete_variation' variation.id %}" class="btn btn-sm btn-danger">Delete</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+          </table>
+        </div>
+          <!-- order-group.// -->
+          <div class="container">
+            <nav class="mt-4" aria-label="Page navigation sample">
+              {% if products.has_other_pages %}
+              <ul class="pagination">
+                {% if products.has_previous %}
+                <li class="page-item"><a class="page-link text-dark"
+                    href="?page={{ products.previous_page_number }}">Previous</a></li>
+                {% else %}
+                <li class="page-item disabled"><a class="page-link text-dark" href="#">Previous</a></li>
+                {% endif %} {% for page_number in products.paginator.page_range %} {% if products.number == page_number %}
+                <li class="page-item active"><a class="page-link bg-dark text-white" style="border: none;" href="#">{{ page_number }}</a></li>
+                {% else %}
+                <li class="page-item"><a class="page-link text-dark" href="?page={{ page_number }}">{{ page_number }}</a>
+                </li>
+                {% endif %} {% endfor %} {% if products.has_next %}
+                <li class="page-item"><a class="page-link text-dark" href="?page={{ products.next_page_number }}">Next</a>
+                </li>
+                {% else %}
+                <li class="page-item disabled"><a class="page-link text-dark" href="#">Next</a></li>
+                {% endif %}
+              </ul>
+              {% endif %}
+            </nav>
+          </div>
+        </main>
+      </div>
+      <!-- row.// -->
+    </form>
+    </div>
+  </section>
+
+
+  {% include 'include/footer.html' %}
+  {% endblock %}
+  

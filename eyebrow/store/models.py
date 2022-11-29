@@ -4,6 +4,7 @@ from django.db import models
 from category.models import category
 from my_admin.models import Account
 from django.db.models import Avg ,Count
+from autoslug import AutoSlugField
 
 # Create your models here.
 
@@ -12,7 +13,7 @@ from django.db.models import Avg ,Count
 #product model
 class Product(models.Model):
     product_name =models.CharField(max_length=200,unique=True)
-    slug         =models.SlugField(max_length=200,unique=True)
+    slug         =AutoSlugField(max_length=200,unique=True)
     description  =models.TextField(max_length=1000)
     price        = models.IntegerField ()
     images       = models.ImageField(upload_to='photos/products')

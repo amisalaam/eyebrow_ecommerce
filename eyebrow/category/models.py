@@ -1,11 +1,12 @@
 
 from django.urls import reverse
 from django.db import models
+from autoslug import AutoSlugField
 
 # Create your models here.
 class category (models.Model):
     category_name=models.CharField(max_length=100 ,unique=True)
-    slug=models.SlugField(max_length=100,unique=True)
+    slug=AutoSlugField(max_length=100,unique=True)
     description =models.TextField(max_length=500 ,blank=True)
     image= models.ImageField(upload_to='photos/categories',blank=True)
        
