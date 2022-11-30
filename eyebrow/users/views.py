@@ -20,7 +20,7 @@ def home(request):
     
     products = Product.objects.filter(is_available = True).order_by('-created_date')[0:8]
     banners = Banner.objects.all().order_by('-id')
-    brandad= BrandaAd.objects.all().order_by('-id')
+    brandad= BrandAd.objects.all().order_by('-id')
     paginator=Paginator(products,12)
 
     context =  {

@@ -36,7 +36,23 @@ urlpatterns = [
     path('update_variation/<int:variation_id>/',views.update_variation,name='update_variation'),
     path('delete_variation/<int:variation_id>/', views.delete_variation, name='delete_variation'),
 
-    #HOME
+    #REVIEW MANAGER
+    path('review_management/',views.review_management,name='review_management'),
+    path('review_block/<int:review_id>/',views.review_block,name='review_block'),
+    path('review_unblock/<int:review_id>/',views.review_unblock,name='review_unblock'),
+
+    #HOME PAGE
+    #BANNER
+    path('banner_management/',views.banner_management,name='banner_management'),
+    path('add_banner/',views.add_banner,name='add_banner'),
+    path('update_banner/<int:banner_id>/',views.update_banner,name='update_banner'),
+    path('delete_banner/<int:banner_id>/',views.delete_banner,name='delete_banner'),
+
+    #BRANDADS
+    path('brandads_management/',views.brandads_management,name='brandads_management'),
+    path('add_brandads/',views.add_brandads,name='add_brandads'),
+    path('update_brandads/<int:brandads_id>/',views.update_brandads,name='update_brandads'),
+    path('delete_brandads/<int:brandads_id>/',views.delete_brandads,name='delete_brandads'),
     
 
 

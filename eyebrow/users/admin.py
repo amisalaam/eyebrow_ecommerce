@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import UserProfile,Banner,BrandaAd
+from .models import UserProfile,Banner,BrandAd
 from django.utils.html import format_html
 
 
@@ -12,6 +12,6 @@ class UserProfileAdmin(admin.ModelAdmin):
 
 admin.site.register(UserProfile, UserProfileAdmin)
 admin.site.register(Banner)
-admin.site.register(BrandaAd)
+admin.site.register(BrandAd)
 
 

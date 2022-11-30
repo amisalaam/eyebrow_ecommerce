@@ -7,9 +7,10 @@ from my_admin.models import Account
 from django.db.models import Q
 from django.core.paginator import Paginator
 from store.models import Product
-from .form import ProductForm,VariationForm
+from .form import ProductForm,VariationForm,BannerForm,BrandAdForm
 from order.models import Order,OrderItem
-from store.models import Variation,category
+from store.models import Variation,category,ReviewRating
+from users.models import Banner,BrandAd
 
 
 # ADMIN DASHBOARD
@@ -304,7 +305,156 @@ def update_variation(request, variation_id):
 def delete_variation(request, variation_id):
     variation = Variation.objects.get(id=variation_id)
     variation.delete()
-    return redirect('variation_management')    
+    return redirect('variation_management')  
+
+
+
+
+
+# REVIEW MANAGMENT
+@never_cache
+@login_required(login_url='signin')
+def review_management(request):
+  reviews = ReviewRating.objects.all()
+  context = {
+    'reviews': reviews
+  }
+  return render(request, 'manager/review_management.html', context)
+
+#BLOCK REVIEW
+@never_cache
+@login_required(login_url='signin')
+def review_block(request, review_id):
+  review = ReviewRating.objects.get(id=review_id)
+  review.status = False
+  review.save()
+  return redirect('review_management')
+
+# UNBLOCK REVIEW
+@never_cache
+@login_required(login_url='signin')
+def review_unblock(request, review_id):
+  review = ReviewRating.objects.get(id=review_id)
+  review.status= True
+  review.save()
+  return redirect('review_management') 
+
+
+
+
+# BANNER MANAGEMENT
+@never_cache
+@login_required(login_url='signin')
+def banner_management(request):
+  banners = Banner.objects.all().order_by('id')
+  context = {
+    'banners': banners
+  }
+  return render(request, 'manager/banner_management.html', context)
+
+#ADD BANNER
+@never_cache
+@login_required(login_url='signin')
+def add_banner(request):
+  if request.method == 'POST':
+    form = BannerForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      return redirect('banner_management')
+
+    else:
+      print(form.errors)
+
+  else:
+    form = BannerForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_banner.html', context)
+
+# UPDATE BANNER
+@never_cache
+@login_required(login_url='signin')
+def update_banner(request, banner_id):
+  banner =  Banner.objects.get(id = banner_id)
+  form = BannerForm(instance = banner)
+  if request.method == 'POST':
+    form = BannerForm(request.POST, request.FILES, instance = banner)
+    if form.is_valid():
+      form.save()
+      return redirect('banner_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_banner.html', context) 
+
+#DELETE BANNER
+@never_cache
+@login_required(login_url='signin')
+def delete_banner(request, banner_id):
+  banner = Banner.objects.get(id = banner_id)
+  banner.delete()
+  return redirect('banner_management')
+
+
+
+# BRANDADS MANAGEMENT
+@never_cache
+@login_required(login_url='signin')
+def brandads_management(request):
+  brandads = BrandAd.objects.all().order_by('id')
+  context = {
+    'brandads': brandads,
+  }
+  return render(request, 'manager/brandads_management.html', context)
+
+#ADD BRAND ADS
+@never_cache
+@login_required(login_url='signin')
+def add_brandads(request):
+  if request.method == 'POST':
+    form = BrandAdForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      return redirect('brandads_management')
+
+    else:
+      print(form.errors)
+
+  else:
+    form = BrandAdForm()
+
+  context = {
+    'form': form
+  }
+  return render(request, 'manager/add_brandads.html', context)
+
+# UPDATE BRAND ADS
+@never_cache
+@login_required(login_url='signin')
+def update_brandads(request, brandads_id):
+  brandads =  BrandAd.objects.get(id = brandads_id)
+  form = BrandAdForm(instance = brandads)
+  if request.method == 'POST':
+    form = BrandAdForm(request.POST, request.FILES, instance = brandads)
+    if form.is_valid():
+      form.save()
+      return redirect('brandads_management')
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/add_brandads.html', context) 
+
+#DELETE BRAND ADS
+@never_cache
+@login_required(login_url='signin')
+def delete_brandads(request, brandads_id):
+  brandads = BrandAd.objects.get(id = brandads_id)
+  brandads.delete()
+  return redirect('brandads_management')
+
+
 
 
 # CHANGE ADMINS PASSWORD

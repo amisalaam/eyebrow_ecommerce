@@ -33,7 +33,7 @@ class Banner(models.Model):
 
 
 
-class BrandaAd(models.Model):
+class BrandAd(models.Model):
     img = models.ImageField(upload_to='photos/brandad', blank=False)
     alt_text = models.CharField(max_length=300,blank=False)
     caption = models.CharField(max_length=50,blank=False)
