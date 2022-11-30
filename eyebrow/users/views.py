@@ -31,7 +31,7 @@ def home(request):
 
     }
 
-    return render(request,'users/home2.html',context)
+    return render(request,'users/home.html',context)
 
 
 # MYACCOUNT CONDITION (DASH BOARD)

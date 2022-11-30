@@ -183,7 +183,7 @@ def cart(request, total=0, quantity=0, cart_items=None):
         'grand_total': grand_total,
     }
     
-    return render(request, 'store/cart1.html', context)
+    return render(request, 'store/cart.html', context)
 
 
 
@@ -245,7 +245,7 @@ def add_to_wishlist(request):
 def wishlist(request):
     products = WishlistItem.objects.filter(user=request.user, is_active=True)
 
-    return render(request, 'store/wishlist2.html', {'products':products})
+    return render(request, 'store/wishlist.html', {'products':products})
 def delete_from_wishlist(request):
     prod_id = request.GET['id']
     print(prod_id)

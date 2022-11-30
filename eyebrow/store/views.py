@@ -37,7 +37,7 @@ def store (request,category_slug=None ):
         'products': paged_products, 
         'products_count':products_count,
     }
-    return render(request, 'store/store1.html', context) 
+    return render(request, 'store/store.html', context) 
 
 
 
@@ -92,7 +92,7 @@ def search(request,products=0,products_count=0):
 
     }
     
-    return render(request, 'store/store1.html',context) 
+    return render(request, 'store/store.html',context) 
   
 
 
