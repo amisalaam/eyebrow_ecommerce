@@ -12,13 +12,13 @@
 	{% include 'include/myaccount_sidebar.html' %}
 
         <main class="col-md-9 ">
-            
-            <article class="card">
+            <h2 class="text-center font-weight-bold text-white my-5">My Profile</h2>
+            <article class="card m-5">
             <header class="card-header" style="background-color: #ffffff;" >
                 <strong class="d-inline-block mr-3">Logged in as:</strong>
                 <span>{{user.first_name}} {{user.last_name}}</span>
             </header>
-            <div class="card-body mb-5">
+            <div class="card-body ">
                 <div class="row">
     
                 <div class="col-md-6">
@@ -33,7 +33,7 @@
                 <div class="col-md-6">
                     <div class="card" style="text-align:center;">
                         <div class="card-body">
-                            {% if userprofile_has_profile.picture %}
+                            {% if userprofile.profile_picture %}
                             <img src="{{userprofile.profile_picture.url}}" alt="User Profile Picture" width="50" height="50" style="border-radius:50%;">
                             {% endif %}
                             <p>{{user.first_name}} {{user.last_name}}</p>

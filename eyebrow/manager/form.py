@@ -1,5 +1,5 @@
 from django import forms
-from store.models import Product,Variation 
+from store.models import Product,Variation,MultipleImages 
 from users.models import Banner,BrandAd
 
 
@@ -59,5 +59,17 @@ class BrandAdForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs['class'] = 'form-control'
 
+
+class MultipleImagesForm (forms.ModelForm):
+
+    class Meta:
+        model = MultipleImages
+        fields = ['image','product']
+
+    def __init__(self, *args, **kwargs):
+        super(MultipleImagesForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
 
 

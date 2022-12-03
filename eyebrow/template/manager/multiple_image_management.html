@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+  {% load static%} 
+    {% block content %} 
+      {% include 'include/nav.html' %}
+
+<section class="section-conten padding-y bg" style="margin-top: 100px;">
+    
+    <div class="container mb-5" style= background-color:#1f1d29;>
+        <div class="row">
+            {% include 'include/manager_sidebar.html' %}
+
+
+            <main class="col-md-9 "> 
+              {% for message in messages %}
+              <div>
+                <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+              </div>
+              {% endfor %}
+              <h2 class="text-center font-weight-bold text-white my-5">Banner Management</h2>
+
+            <div class="row d-flex flex-row-reverse">
+          <a href="{% url 'add_multiple_images' %}" class="btn btn-dark m-3 col-2 ">Add New</a>
+        </div>
+            <div class="row shopping__cart__table m-4">
+                <table class="table bg-white">
+                    <thead>
+                      <tr>
+                        <th scope="col">id</th>
+                        <th scope="col">banner</th>
+                        <th scope="col">Product Name</th>
+                        <th scope="col">Update</th>
+                        <th scope="col">Delete</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        {% for multipleimages in multipleimages %}
+                        <tr>
+                          <th scope="row">{{ multipleimages.id }}</th>
+                          <td><img src="{{ multipleimages.image.url }}" width="250" height="250" alt=""></td>
+                          <td >{{ multipleimages.product.product_name }}</td>
+                          <td><a href="{% url 'update_multiple_images' multipleimages.id %}" class= "btn btn-warning my-5">Update</a></td>
+                          <td><a href="{% url 'delete_multiple_images' multipleimages.id %}" class= "btn btn-dark my-5">Delete</a></td>
+                        </tr>
+                        {% endfor %}
+                      </tbody>
+                  </table>
+                  <div class="container d-flex align-items-center justify-content-center">
+                    <nav
+                        class="mt-4 d-flex justify-content-center"
+                        aria-label="Page navigation sample">
+                        {% if multipleimages.has_other_pages %}
+                        <ul class="pagination">
+                            {% if multipleimages.has_previous %}
+                            <li class="page-item">
+                            <a class="page-link" href="?page{{ multipleimages.previous_page_number }}">Previous</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled">
+                            <a class="page-link" href="#">Previous</a>
+                            </li>
+                            {% endif %}
+                            {% for i in multipleimages.paginator.page_range %} 
+                            {% if multipleimages.number == i %}
+
+                            <li class="page-item active">
+                            <a class="page-link" href="#">{{i}}</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item">
+                            <a class="page-link" href="?page={{i}}">{{i}}</a>
+                            </li>
+                            {% endif %} 
+                            {% endfor %} 
+                            {% if multipleimages.has_next %}
+                            <li class="page-item">
+                            <a class="page-link" href="?page={{ multipleimages.next_page_number }}">Next</a>
+                            </li>
+                            {% else %}
+                            <li class="page-item disabled "><a class="page-link" href="#">Next</a></li>
+
+                            {% endif %}
+                        </ul>
+                            
+                        {% endif %}
+                        </nav>
+                  </div>
+                
+
+              </div>
+        </main>
+    </div> <!-- row.// -->
+    </div>
+    
+    
+    </section>
+    {% include 'include/footer.html' %}
+    {% endblock %}

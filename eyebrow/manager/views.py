@@ -7,9 +7,9 @@ from my_admin.models import Account
 from django.db.models import Q
 from django.core.paginator import Paginator
 from store.models import Product
-from .form import ProductForm,VariationForm,BannerForm,BrandAdForm
+from .form import ProductForm,VariationForm,BannerForm,BrandAdForm,MultipleImagesForm
 from order.models import Order,OrderItem
-from store.models import Variation,category,ReviewRating
+from store.models import Variation,category,ReviewRating,MultipleImages
 from users.models import Banner,BrandAd
 
 
@@ -18,7 +18,19 @@ from users.models import Banner,BrandAd
 @login_required(login_url='signin')
 def manager_dashboard(request,):
     if request.user.is_superadmin:
-        return render(request,'manager/manager_dashboard.html')
+        user_count = Account.object.filter(is_superadmin=False).count()
+        product_count = Product.objects.all().count()
+        order_count = Order.objects.filter().count()
+        category_count = category.objects.all().count()
+
+        context = {
+            'user_count': user_count,
+            'product_count': product_count,
+            'order_count' : order_count,
+            'category_count' : category_count,
+        }
+
+        return render(request,'manager/manager_dashboard.html',context)
     else:
         return redirect('home')
 
@@ -69,59 +81,73 @@ def unblock_user(request,user_id):
 @never_cache
 @login_required(login_url='signin')
 def product_management(request):
-  if request.method == "POST":
-    key = request.POST['key']
-    products = Product.objects.filter(Q(product_name__icontains=key) | Q(slug__startswith=key) | Q(category__category_name__startswith=key)).order_by('id')
-  else:
-    products = Product.objects.all().order_by('id')
+  if request.user.is_superadmin: 
+    if request.method == "POST":
+      key = request.POST['key']
+      products = Product.objects.filter(Q(product_name__icontains=key) | Q(slug__startswith=key) | Q(category__category_name__startswith=key)).order_by('id')
+    else:
+      products = Product.objects.all().order_by('id')
 
-  paginator = Paginator(products, 10)
-  page = request.GET.get('page')
-  paged_products = paginator.get_page(page)
+    paginator = Paginator(products, 10)
+    page = request.GET.get('page')
+    paged_products = paginator.get_page(page)
   
-  context = {
+    context = {
     'products': paged_products
-  }
-  return render(request, 'manager/product_management.html', context)
+    }
+    return render(request, 'manager/product_management.html', context)
+  else:
+    return redirect('home')  
   
 #ADD PRODUCT
 @never_cache
 @login_required(login_url='signin')  # type: ignore
 def add_product(request):
-  if request.method == 'POST':
-    form = ProductForm(request.POST, request.FILES)
-    if form.is_valid():
-        form.save()
-        return redirect('product_management')
+  if request.user.is_superadmin:
+    if request.method == 'POST':
+      form = ProductForm(request.POST, request.FILES)
+      if form.is_valid():
+          form.save()
+          return redirect('product_management')
+      else:
+       messages.error(request,'Invalid form')
+       return redirect('add_product')     
+    else:
+      form = ProductForm()
+      context = {
+          'form': form
+       }
+      return render(request, 'manager/add_product.html', context)
   else:
-    form = ProductForm()
-    context = {
-      'form': form
-    }
-    return render(request, 'manager/add_product.html', context)
+    return redirect('home')    
+
 
 #EDIT PRODUCT
 def edit_product(request, product_id):
     product = Product.objects.get(id=product_id)
     form = ProductForm(instance=product)
+    if request.user.is_superadmin:
+      if request.method == 'POST':
+          try:
+              form = ProductForm(request.POST, request.FILES, instance=product)
+              if form.is_valid():
+                  form.save()
+                  messages.success(request,'Product edited succefully')
+                  return redirect('product_management')
+              else:
+                messages.error(request,'Invalid form') 
+                return redirect('edit_product')     
 
-    if request.method == 'POST':
-        try:
-            form = ProductForm(request.POST, request.FILES, instance=product)
-            if form.is_valid():
-                form.save()
-                messages.success(request,'Product edited succefully')
+          except Exception as e:
+              raise e
 
-                return redirect('product_management')
-
-        except Exception as e:
-            raise e
-
-    context = {
-        'product': product,
-        'form': form
-    }
-    return render(request, 'manager/edit_product.html', context) 
+      context = {
+          'product': product,
+          'form': form
+      }
+      return render(request, 'manager/edit_product.html', context) 
+    else:
+      return redirect('home')  
 
 # DELETE PRODUCTS
 @never_cache
@@ -137,11 +163,12 @@ def delete_product(request, product_id):
 
 #ORDER MANAGEMENT
 def order_management(request):
+  if request.user.is_superadmin:
     if request.method == 'POST':
         key = request.POST['key']
-        order = Order.objects.filter( Q(tracking_no_startswith=key) | Q(useremailstartswith=key) | Q(first_name_startswith=key)).order_by('id')
+        order = Order.objects.filter( Q(tracking_no_startswith=key) | Q(useremailstartswith=key) | Q(first_name_startswith=key)).order_by('-id')
     else:
-        order = Order.objects.filter(user=request.user).order_by('id') 
+        order = Order.objects.filter(user=request.user).order_by('-id') 
     paginator = Paginator(order, 10)
     page = request.GET.get('page')
     paged_order = paginator.get_page(page)
@@ -150,9 +177,12 @@ def order_management(request):
         'order': paged_order
         }
     return render(request, 'manager/order_management.html',context)
+  else:
+    return redirect('home')  
 
 #VIEW MANAGEMENT ORDER
 def manager_vieworder(request,tracking_no):
+  if request.user.is_superadmin:
     order = Order.objects.filter(tracking_no=tracking_no,user=request.user.id).first()
     orderitems = OrderItem.objects.filter(order=order)
     context={
@@ -160,6 +190,8 @@ def manager_vieworder(request,tracking_no):
         'orderitems':orderitems,
     }
     return render(request,'manager/manager_vieworder.html',context)
+  else:
+    return redirect('home') 
 
 #ACCEPT ORDER
 def manager_accept_order(request, tracking_no):
@@ -173,7 +205,7 @@ def manager_ship_order(request, tracking_no):
     order = Order.objects.get(tracking_no=tracking_no)
     order.status = 'Shipped'
     order.save()
-    return redirect('manager_vieworder')
+    return redirect('order_management')
 
 #DELIVERED ORDER
 def manager_delivered_order(request, tracking_no):
@@ -192,15 +224,19 @@ def manager_cancel_order(request,tracking_no):
 
 #CATOGERY MANAGEMENT
 def category_management(request):
-  categories = category.objects.all().order_by('id')
+  if request.user.is_superadmin:
+    categories = category.objects.all().order_by('id')
 
-  context = {
-        'categories': categories
-    }
-  return render(request, 'manager/category_management.html', context)
+    context = {
+          'categories': categories
+      }
+    return render(request, 'manager/category_management.html', context)
+  else:
+    return redirect('home')  
 
 #ADD CATEGORY
 def add_category(request):
+  if request.user.is_superadmin:
     if request.method == 'POST':
         try:
             category_name = request.POST['category_name']
@@ -217,6 +253,8 @@ def add_category(request):
             raise e
 
     return render(request, 'manager/add_category.html')
+  else:
+    return redirect('home')  
 
 #UPDATE CATEGORY  
 def update_category(request, category_id):
@@ -276,6 +314,9 @@ def add_variation(request):
         if form.is_valid():
             form.save()
             return redirect('variation_management')
+        else:
+         messages.error(request,'Invalid form')
+         return redirect('add_variation')    
 
     else:
         form = VariationForm()
@@ -293,6 +334,9 @@ def update_variation(request, variation_id):
         if form.is_valid():
             form.save()
             return redirect('variation_management')
+        else:
+          messages.error(request,'Invalid form') 
+          return redirect('update_variation')     
     else:
         form = VariationForm(instance=variation)
     context = {
@@ -361,9 +405,9 @@ def add_banner(request):
     if form.is_valid():
       form.save()
       return redirect('banner_management')
-
     else:
-      print(form.errors)
+      messages.error(request,'Invalid form') 
+      return redirect('add_banner') 
 
   else:
     form = BannerForm()
@@ -383,7 +427,11 @@ def update_banner(request, banner_id):
     form = BannerForm(request.POST, request.FILES, instance = banner)
     if form.is_valid():
       form.save()
+      messages.success(request,'Added Succefully')
       return redirect('banner_management')
+    else:
+      messages.error(request,'Invalid form') 
+      return redirect('update_banner')   
   context = {
     'form':form
   }
@@ -395,7 +443,76 @@ def update_banner(request, banner_id):
 def delete_banner(request, banner_id):
   banner = Banner.objects.get(id = banner_id)
   banner.delete()
+  messages.success(request,'Item deleted successfully')
   return redirect('banner_management')
+
+
+
+#MULTIPLE IMAGES MANAGEMENT
+@never_cache
+@login_required(login_url='signin')
+def multiple_image_management(request):
+  multipleimages = MultipleImages.objects.all().order_by('id')
+  paginator = Paginator(multipleimages, 5)
+  page = request.GET.get('page')
+  multipleimages = paginator.get_page(page)
+
+  context = {
+    'multipleimages': multipleimages
+  }
+  return render(request, 'manager/multiple_image_management.html', context)
+  
+#ADD MULTIPLE IMAGES
+@never_cache
+@login_required(login_url='signin')
+def add_multiple_images(request):  # type: ignore
+  if request.method == 'POST':
+    form = MultipleImagesForm(request.POST, request.FILES)
+    if form.is_valid():
+      form.save()
+      messages.error(request,'')
+      return redirect('add_multiple_images')
+    else:
+      print(form.errors)
+      messages.error(request,'Invalid form') 
+      return redirect('add_multiple_images') 
+  else:
+    form = MultipleImagesForm()
+
+  context = {
+    'form': form
+  }
+  return render(request,'manager/add_multiple_images.html',context)
+
+# UPDATE MULTIPLE IMAGE
+@never_cache
+@login_required(login_url='signin')
+def update_multiple_images(request,multi_id):
+  multipleimages = MultipleImages.objects.get(id=multi_id)
+  form = MultipleImagesForm(instance = multipleimages)
+  if request.method == 'POST':
+    form = MultipleImagesForm(request.POST, request.FILES, instance = multipleimages)
+    if form.is_valid():
+      form.save()
+      messages.success(request,'Added Succefully')
+      return redirect('multiple_image_management')
+    else:
+      messages.error(request,'Invalid form') 
+      return redirect('update_multiple_images')   
+  context = {
+    'form':form
+  }
+  return render(request, 'manager/update_multiple_images.html', context)
+
+
+# DELETE MULTIPLEIMAGES
+@never_cache
+@login_required(login_url='signin')
+def delete_multiple_images(request, multi_id):
+  multipleimages = MultipleImages.objects.get(id = multi_id)
+  multipleimages.delete()
+  return redirect('multiple_image_management')
+
 
 
 
@@ -418,9 +535,9 @@ def add_brandads(request):
     if form.is_valid():
       form.save()
       return redirect('brandads_management')
-
     else:
-      print(form.errors)
+      messages.error(request,'Invalid form') 
+      return redirect('add_brandads') 
 
   else:
     form = BrandAdForm()
@@ -441,6 +558,8 @@ def update_brandads(request, brandads_id):
     if form.is_valid():
       form.save()
       return redirect('brandads_management')
+    else:
+      messages.error(request,'Invalid form')  
   context = {
     'form':form
   }
@@ -454,6 +573,11 @@ def delete_brandads(request, brandads_id):
   brandads.delete()
   return redirect('brandads_management')
 
+
+
+
+
+  
 
 
 

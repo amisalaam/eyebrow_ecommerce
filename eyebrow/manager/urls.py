@@ -54,6 +54,15 @@ urlpatterns = [
     path('update_brandads/<int:brandads_id>/',views.update_brandads,name='update_brandads'),
     path('delete_brandads/<int:brandads_id>/',views.delete_brandads,name='delete_brandads'),
     
+    #MULTIPLE IMAGE MANAGEMENTS
+    path('multiple_image_management/',views.multiple_image_management,name='multiple_image_management'),
+    path('delete_multiple_images/<int:multi_id>/',views.delete_multiple_images,name='delete_multiple_images'),
+    path('update_multiple_images/<int:multi_id>/',views.update_multiple_images,name='update_multiple_images'),
+    path('add_multiple_images/',views.add_multiple_images,name='add_multiple_images'),
+    
+
+
+
 
 
     

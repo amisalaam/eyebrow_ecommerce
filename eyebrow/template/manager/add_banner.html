@@ -4,13 +4,18 @@
 {% block content %}
 {% include 'include/nav.html' %}
 <section class="section-content padding-y bg" style="margin-top: 100px;">
-    <div class="container card mb-5" style= background-color:#F3F2EE;>
+    <div class="container card mb-5" style= background-color:#1f1d29;>
       <div class="row d-flex justify-content-center">
         <div class="col-6">
+          {% for message in messages %}
+          <div>
+            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+          </div>
+          {% endfor %}
           {% if '/add_banner/' in request.path %}
-          <h2 class="text-center font-weight-bold text-dark my-5">Add Banner</h2>
+          <h2 class="text-center font-weight-bold text-white my-5">Add Banner</h2>
           {% else %}
-          <h2 class="text-center font-weight-bold text-dark my-5">Update Banner</h2>
+          <h2 class="text-center font-weight-bold text-white my-5">Update Banner</h2>
           {% endif %}
           <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}

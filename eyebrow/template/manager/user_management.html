@@ -11,6 +11,11 @@
             {% include 'include/manager_sidebar.html' %}
         <main class="col-md-9">
             <div class="col-md-12">
+              {% for message in messages %}
+              <div>
+                <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+              </div>
+              {% endfor %}
                 <h3 class="text-center text-white my-5"><b> USER MANAGEMENT </b></h3>
               </div>
 

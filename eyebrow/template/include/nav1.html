@@ -25,21 +25,6 @@
 								<a href="{% url 'store' %}">Shop</a>
 							</li>
 
-							<li class="label1" data-label1="hot">
-								<a href="shoping-cart.html">Features</a>
-							</li>
-
-							<li>
-								<a href="blog.html">Blog</a>
-							</li>
-
-							<li>
-								<a href="about.html">About</a>
-							</li>
-
-							<li>
-								<a href="contact.html">Contact</a>
-							</li>
 						</ul>
 					</div>	
 
@@ -157,12 +142,14 @@
 							My Account
 						</a>
 					</li>
-
+					  
+					  {% if user.is_superuser %}
 					<li class="p-b-13">
-						<a href="#" class="stext-102 cl2 hov-cl1 trans-04">
-							Track Oder
+						<a href="{% url 'manager_dashboard' %}" class="stext-102 cl2 hov-cl1 trans-04">
+							Admin
 						</a>
 					</li>
+					{% endif %}
 
 					<li class="p-b-13">
 						<a href="#" class="stext-102 cl2 hov-cl1 trans-04">

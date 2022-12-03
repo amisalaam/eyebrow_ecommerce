@@ -9,7 +9,13 @@
     <div class="container" style= background-color:#1f1d29;>
         <div class="row">
             {% include 'include/manager_sidebar.html' %}
+            
         <main class="col-md-9">
+          {% for message in messages %}
+          <div>
+            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+          </div>
+          {% endfor %}
             <div class="col-md-12">
                 <h3 class="text-center text-white my-5"><b> CATEGORY MANAGEMENT </b></h3>
               </div>

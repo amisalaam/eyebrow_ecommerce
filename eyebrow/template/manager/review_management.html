@@ -5,11 +5,16 @@
 
       
       <section class="section-content padding-y bg">
-    <div class="container mb-5" style= background-color:#F3F2EE;>
+    <div class="container mb-5" style= background-color:#1f1d29;>
       <div class="row">
         {% include 'include/manager_sidebar.html' %}
         <main class="col-md-9">
-        <h2 class="text-center font-weight-bold text-dark my-5">Review Management</h2>
+          {% for message in messages %}
+          <div>
+            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+          </div>
+          {% endfor %}
+        <h2 class="text-center font-weight-bold text-white my-5">Review Management</h2>
           <div class= " d-flex justify-content-end">
           <form action="" class="search" method="POST" >
             {% csrf_token %}

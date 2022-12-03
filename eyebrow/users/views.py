@@ -56,7 +56,10 @@ def myaccount(request):
 # EDIT PROFILE CONDITION
 @login_required(login_url='signin')
 def edit_profile(request):
-    userprofile = get_object_or_404(UserProfile, user=request.user)
+    if UserProfile.objects.filter(user=request.user):
+        userprofile = get_object_or_404(UserProfile, user=request.user)
+    else: 
+        userprofile = UserProfile.objects.create(user=request.user)   
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(

@@ -8,70 +8,75 @@
     <div class="row">
       {% include 'include/manager_sidebar.html' %}
       <main class="col-md-9">
+        {% for message in messages %}
+        <div>
+          <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+        </div>
+        {% endfor %}
         <!-- heade -->
-        <div class="col-md-12">
+        <div class="col-md-12 my-5">
           <h3 class="text-center text-white my-5"><b> DASHBOARD </b></h3>
         </div>
         <!-- head end -->
         <div class="row">
-          <div class="col-md-6 my-3">
+          <div class="col-md-12 my-3">
             <div
               class="card"
               style="text-align: center; background-color: #e5e5e5">
               <div class="card-body">
-                <h5 class="card-title">Total Orders</h5>
-                <h4>{{orders_count}}</h4>
-                <a href="">View order</a>
+                <h5 class="card-title">Total Users</h5>
+                <h4 class="text-danger my-2">{{user_count}}</h4>
+                <a href="{% url 'user_management' %}">View users </a>
               </div>
             </div>
           </div>
 
-          <div class="col-md-6 my-3">
+          <div class="col-md-12 my-3">
             <div
               class="card"
               style="text-align: center; background-color: #e5e5e5">
               <div class="card-body">
                 <h5 class="card-title">Total Orders</h5>
-                <h4>{{orders_count}}</h4>
-                <a href="">View order</a>
+                <h4 class="text-danger my-2">{{order_count}}</h4>
+                <a href="{% url 'order_management' %}">View order</a>
               </div>
             </div>
           </div>
-          <div class="col-md-6 my-3">
+          <div class="col-md-12 my-3">
             <div
               class="card"
               style="text-align: center; background-color: #e5e5e5">
               <div class="card-body">
-                <h5 class="card-title">Total Orders</h5>
-                <h4>{{orders_count}}</h4>
-                <a href="">View order</a>
+                <h5 class="card-title">Product Catogories</h5>
+                <h4 class="text-danger my-2 ">{{category_count}}</h4>
+                <a href="{% url 'category_management' %}">View Catogories</a>
               </div>
             </div>
           </div>
-          <div class="col-md-6 my-3">
+          <div class="col-md-12 my-3">
             <div
               class="card"
               style="text-align: center; background-color: #e5e5e5">
               <div class="card-body">
-                <h5 class="card-title">Total Orders</h5>
-                <h4>{{orders_count}}</h4>
-                <a href="">View order</a>
+                <h5 class="card-title">Total products</h5>
+                <h4 class="text-danger my-2" >{{product_count}}</h4>
+                <a href="{% url 'product_management' %}">View product</a>
               </div>
             </div>
           </div> 
-          <div class="col-md-6 my-3">
+          <!-- <div class="col-md-6 my-3">
             <div
               class="card"
               style="text-align: center; background-color: #e5e5e5">
               <div class="card-body">
-                <h5 class="card-title">Total Orders</h5>
+                <h5 class="card-title">Total Variations</h5>
                 <h4>{{orders_count}}</h4>
                 <button><a href="">View order</a></button>
               </div>
             </div>
-          </div>
-          <div class="col-md-6 my-3">
-            <div
+          </div> -->
+          <!-- <div class="col-md-6 my-3"> -->
+            <!-- <div
               class="card"
               style="text-align: center; background-color: #e5e5e5">
               <div class="card-body">
@@ -80,7 +85,7 @@
                 <a href="">View order</a>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </main>
     </div>

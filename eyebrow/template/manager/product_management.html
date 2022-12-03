@@ -12,6 +12,11 @@
         {% include 'include/manager_sidebar.html' %}
   
         <main class="col-md-9">
+          {% for message in messages %}
+          <div>
+            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+          </div>
+          {% endfor %}
           <h2 class="text-center font-weight-bold text-white my-5">Manage Products</h2>
   
           <div class="row d-flex justify-content-between">

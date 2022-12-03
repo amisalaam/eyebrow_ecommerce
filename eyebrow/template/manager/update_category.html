@@ -8,6 +8,11 @@
     <div class="container mt-5 mb-5">
       <div class="row d-flex justify-content-center">
         <div class="col-6 card p-5">
+          {% for message in messages %}
+          <div>
+            <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
+          </div>
+          {% endfor %}
           <h1 class="text-center h2 mb-4">Update Category</h1>
           <form action="{% url 'update_category' category.id %}" method="POST">
             {% csrf_token %}

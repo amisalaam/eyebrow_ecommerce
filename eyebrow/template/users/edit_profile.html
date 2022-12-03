@@ -17,16 +17,14 @@
                   <p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
                 </div>
                 {% endfor %}
+                <h2 class="text-center font-weight-bold text-white my-5">Edit Profile</h2>
             
-            <article class="card">
+            <article class="card m-5">
                 
-            <header class="card-header" style="background-color: #ffffff;" >
-                <strong class="d-inline-block mr-3">Edit Profile</strong>
-                
-            </header>
+         
             <div class="card-body">
-                <div class="text-center my- ">
-                    {% if userprofile_has_profile_picture %}
+                <div class="text-center my-5 ">
+                    {% if userprofile.profile_picture %}
                     <img src="{{userprofile.profile_picture.url}}" alt="Profile Picture" width="100" style="border-radius: 50%;">
                     {% endif %}
                 </div>
