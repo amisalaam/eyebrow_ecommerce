@@ -17,21 +17,18 @@ from django.core.paginator import Paginator
 
 
 def home(request):
-    
-    products = Product.objects.filter(is_available = True).order_by('-created_date')[0:8]
-    banners = Banner.objects.all().order_by('-id')
-    brandad= BrandAd.objects.all().order_by('-id')
+    products = Product.objects.filter(is_available = True).order_by('-created_date')[0:12]
+    banners = Banner.objects.all().order_by('-id')[0:3]
+    brandad= BrandAd.objects.all().order_by('-id')[0:3]
     paginator=Paginator(products,12)
-
     context =  {
         'products':products,
         'paginator':paginator,
         'banners': banners,
         'brandad' : brandad
-
     }
 
-    return render(request,'users/home.html',context)
+    return render(request,'users/home1.html',context)
 
 
 # MYACCOUNT CONDITION (DASH BOARD)
