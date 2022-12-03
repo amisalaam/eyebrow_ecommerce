@@ -61,7 +61,7 @@
 							</span>
 						</div>
 						<span class="mtext-106 cl2">
-							RS : {{single_product.price}}
+							MRP: ₹{{single_product.price}}
 						</span>
 						<p class="stext-102 cl3 p-t-23">
 							{{single_product.description}}
@@ -135,7 +135,7 @@
 						</li>
 
 						<li class="nav-item p-b-10">
-							<a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews (1)</a>
+							<a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews ({{single_product.countReview}})</a>
 						</li>
 					</ul>
 
@@ -265,7 +265,7 @@
                   									<p class=" my-5 alert alert-{{message.tags}}">{{message}}</p>
                 								</div>
                 							{% endfor %}
-										{% if user.is_authenticated %}
+										
 											{% if orderitem %}
 										<!-- Add review -->
 										<form class="w-full" action="{% url 'submit_review' single_product.id %}" method="POST">
@@ -323,13 +323,15 @@
 														<input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email" type="text" name="email">
 														</div> -->
 													</div>
+													{% if user.is_authenticated %}
 
 													<input type="submit" value="Submit"class="btn btn-dark ">
+													{% endif %}
 												
 										
 												</form>
 											{% endif %}
-										{% endif %}
+										
 									</div>
 								</div>
 							</div>

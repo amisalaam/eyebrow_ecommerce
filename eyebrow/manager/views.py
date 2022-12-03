@@ -297,7 +297,7 @@ def variation_management(request):
     else:
         variations = Variation.objects.all().order_by('id')
 
-    paginator = Paginator(variations, 10)
+    paginator = Paginator(variations, 15)
     page = request.GET.get('page')
     paged_variations = paginator.get_page(page)
 
@@ -453,7 +453,7 @@ def delete_banner(request, banner_id):
 @login_required(login_url='signin')
 def multiple_image_management(request):
   multipleimages = MultipleImages.objects.all().order_by('id')
-  paginator = Paginator(multipleimages, 5)
+  paginator = Paginator(multipleimages, 10)
   page = request.GET.get('page')
   multipleimages = paginator.get_page(page)
 

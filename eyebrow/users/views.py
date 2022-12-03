@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 
 from  store.models import Product
 from .models import *
-# from orders.model import order
+from order.models import Order
 from .forms import UserForm, UserProfileForm
 from django.core.paginator import Paginator
 
@@ -34,13 +34,13 @@ def home(request):
 # MYACCOUNT CONDITION (DASH BOARD)
 @login_required(login_url='signin')
 def myaccount(request):
-    # order=order.objects.order_by('-created_at').filter(user_id=request.user.id,is_ordered=True)
-    # orders_count=order.count()
+    order=Order.objects.order_by('-created_at').filter(id=request.user.id)
+    orders_count=order.count()
     
     userprofile = UserProfile.objects.filter(user_id=request.user.id)
 
     context = {
-    #     'orders_count':orders_count,
+    'orders_count':orders_count,
     'userprofile':userprofile
     
      }
