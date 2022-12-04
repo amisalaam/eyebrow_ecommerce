@@ -113,8 +113,8 @@
                   </td>
                   <td>
                     <div class="price-wrap">
-                      <var class="price">${{cart_item.sub_total }}</var><br>
-                      <small class="text-muted"> ${{ cart_item.product.price}} each </small>
+                      <var class="price">₹{{cart_item.sub_total }}</var><br>
+                      <small class="text-muted"> ₹{{ cart_item.product.price}} each </small>
                     </div>
                   </td>
                 </tr>
@@ -125,7 +125,7 @@
             <div class="container">
               <dl>
                 <dt>Total Amount:</dt>
-                <dd class="text-right">${{ grand_total }}</dd>
+                <dd class="text-right">₹{{ grand_total }}</dd>
               </dl>
             </div>
             <input type="hidden" value="COD" name="payment_mode">

@@ -34,11 +34,9 @@ def home(request):
 # MYACCOUNT CONDITION (DASH BOARD)
 @login_required(login_url='signin')
 def myaccount(request):
-    order=Order.objects.order_by('-created_at').filter(id=request.user.id)
+    order=Order.objects.filter(id=request.user.id).order_by('-created_at')
     orders_count=order.count()
-    
     userprofile = UserProfile.objects.filter(user_id=request.user.id)
-
     context = {
     'orders_count':orders_count,
     'userprofile':userprofile
@@ -59,6 +57,7 @@ def edit_profile(request):
         userprofile = UserProfile.objects.create(user=request.user)   
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=request.user)
+        
         profile_form = UserProfileForm(
             request.POST, request.FILES, instance=userprofile)
         if user_form.is_valid() and profile_form.is_valid():

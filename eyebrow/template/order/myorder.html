@@ -41,6 +41,8 @@
                     <td>₹ {{ item.total_price }}</td>
                     {% if item.status == 'Cancelled' %}
                     <td class="text-danger "><b>{{ item.status }}</b></td>
+                    {% elif item.status == 'Pending' %}
+                    <td class="text-warning "><b>{{ item.status }}</b></td>
                     {% else %}
                     <td class="text-success fw-bold "> <b>{{ item.status }}</b></td>
                     {% endif %}

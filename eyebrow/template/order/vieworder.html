@@ -82,6 +82,8 @@
                               <h6>Payment Mode : {{order.payment_mode}}</h6> <br>
                               {% if order.status == 'Cancelled' %}
                               <h6>Order Status: <span class="text-danger">{{order.status}}</span></h6> <br>
+                              {% elif order.status == 'Pending' %}
+                              <h6>Order Status: <span class="text-warning">{{order.status}}</span></h6> <br>
                               {% else %}
                               <h6>Order Status: <span class="text-success">{{order.status}}</span></h6> <br>
                               {% endif %}
