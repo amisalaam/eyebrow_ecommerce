@@ -87,7 +87,6 @@ def product_management(request):
       products = Product.objects.filter(Q(product_name__icontains=key) | Q(slug__startswith=key) | Q(category__category_name__startswith=key)).order_by('id')
     else:
       products = Product.objects.all().order_by('id')
-
     paginator = Paginator(products, 10)
     page = request.GET.get('page')
     paged_products = paginator.get_page(page)
@@ -168,7 +167,7 @@ def order_management(request):
         key = request.POST['key']
         order = Order.objects.filter( Q(tracking_no_startswith=key) | Q(useremailstartswith=key) | Q(first_name_startswith=key)).order_by('-id')
     else:
-        order = Order.objects.filter(user=request.user).order_by('-id') 
+        order = Order.objects.all().order_by('-id') 
     paginator = Paginator(order, 10)
     page = request.GET.get('page')
     paged_order = paginator.get_page(page)

@@ -106,12 +106,17 @@
 							 </div>
 							    <div class="flex-w flex-r-m p-b-10">
 								   <div class="size-204 flex-w flex-m respon6-next d-flex justify-content-between ">
-										 <button  type="submit" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 my-3">Add to cart </button>
+										 <button  type="submit" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 my-1 ">Add to cart  </button>
 										{% if user.is_authenticated %}
 										{% if wishlist %}
-										<a href="" class=" btn btn-danger delete-wish my-3 " data-item="{{ single_product.id }}">Added to wishlist</a>
+										<!-- <a href="" class=" btn btn-danger delete-wish my-3 " data-item="{{ single_product.id }}">Added to wishlist</a> -->
+										<a href="" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 delete-wish"data-item="{{ single_product.id }}">Add to whishlist </a>
+
 										{% else %}
-										<a href="" pid="{{single_product.id}}" id="addtowishlist" class="  btn btn-success" >Add to wishlist</a>
+										<!-- <a href="" pid="{{single_product.id}}" id="addtowishlist" class="  btn btn-success" >Add to wishlist</a> -->
+										<a href="" pid="{{single_product.id}}" id="addtowishlist" class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 my-1 ">Added to whishlist</a>
+
+										
 										{% endif %}
 										{% endif %}
 							 	    </div>
@@ -340,15 +345,6 @@
 				</div>
 			</div>
 		</div>
-
-		<div class="bg6 flex-c-m flex-w size-302 m-t-73 p-tb-15">
-			<span class="stext-107 cl6 p-lr-25">
-				SKU: JAK-01
-			</span>
-
-			<span class="stext-107 cl6 p-lr-25">
-				Categories: Jacket, Men
-			</span>
 		</div>
 	</section>
 
