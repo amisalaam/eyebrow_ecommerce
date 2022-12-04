@@ -182,7 +182,7 @@ def order_management(request):
 #VIEW MANAGEMENT ORDER
 def manager_vieworder(request,tracking_no):
   if request.user.is_superadmin:
-    order = Order.objects.filter(tracking_no=tracking_no,user=request.user.id).first()
+    order = Order.objects.filter(tracking_no=tracking_no).first()
     orderitems = OrderItem.objects.filter(order=order)
     context={
         'order': order,
