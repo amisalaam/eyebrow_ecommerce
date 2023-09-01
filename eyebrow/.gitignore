@@ -106,6 +106,7 @@ env.bak/
 venv.bak/
 djvenv/
 Scripts/
+myenv
 
 # mkdocs documentation 
 /site 
