@@ -55,8 +55,6 @@ INSTALLED_APPS = [
     'manager',
 
 
-    
-
 ]
 
 MIDDLEWARE = [
@@ -101,12 +99,9 @@ AUTH_USER_MODEL ='my_admin.Account'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME':config('DATABASE_NAME'),
-        'USER' :config('DATABASE_USER'),
-        'PASSWORD' :config('DATABASE_PASSWORD'),
-        'HOST' : config('DATABASE_HOST'),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -167,8 +162,8 @@ environ.Env.read_env()
 
 #SMTP CONFIGRATION 
 
-EMAIL_HOST = config('EMAIL_HOST')
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
+EMAIL_HOST ='smtp.gmail.com'  
+EMAIL_PORT =587
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
+EMAIL_USE_TLS = True
